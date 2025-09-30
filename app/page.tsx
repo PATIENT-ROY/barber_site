@@ -1,103 +1,846 @@
+"use client";
 import Image from "next/image";
+import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
+import {
+  Phone,
+  Menu,
+  X,
+  Home as HomeIcon,
+  Scissors,
+  GraduationCap,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+} from "lucide-react";
+import { useEffect, useRef, useState, useCallback } from "react";
+
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.9 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const galleryItem: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.9,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const reviewsRef = useRef<HTMLDivElement | null>(null);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  const openGalleryModal = (index: number) => {
+    setSelectedImage(index);
+  };
+
+  const closeGalleryModal = () => {
+    setSelectedImage(null);
+  };
+
+  const navigateGallery = useCallback(
+    (direction: "prev" | "next") => {
+      if (selectedImage === null) return;
+      const images = [
+        "/gallery/1.png",
+        "/gallery/2.png",
+        "/gallery/3.png",
+        "/gallery/4.png",
+        "/gallery/5.png",
+        "/gallery/6.png",
+      ];
+
+      if (direction === "prev") {
+        setSelectedImage(
+          selectedImage > 0 ? selectedImage - 1 : images.length - 1
+        );
+      } else {
+        setSelectedImage(
+          selectedImage < images.length - 1 ? selectedImage + 1 : 0
+        );
+      }
+    },
+    [selectedImage]
+  );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["home", "gallery", "masterclasses", "contacts"];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (selectedImage === null) return;
+
+      if (event.key === "Escape") {
+        closeGalleryModal();
+      } else if (event.key === "ArrowLeft") {
+        navigateGallery("prev");
+      } else if (event.key === "ArrowRight") {
+        navigateGallery("next");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, navigateGallery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen) {
+        const target = event.target as Element;
+        if (!target.closest("nav")) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const el = reviewsRef.current;
+    if (!el) return;
+
+    let frameId: number | null = null;
+    let last = 0;
+    const speedMobile = 0.08; // px per ms (very slow for comfortable reading)
+
+    const step = (t: number) => {
+      if (!last) last = t;
+      const dt = t - last;
+      last = t;
+      if (window.innerWidth < 768 && !isPaused) {
+        if (el.scrollWidth > el.clientWidth) {
+          el.scrollLeft += dt * speedMobile;
+          if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+            el.scrollLeft = 0;
+          }
+        }
+      }
+      frameId = requestAnimationFrame(step);
+    };
+
+    frameId = requestAnimationFrame(step);
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId);
+    };
+  }, [isPaused]);
+
+  return (
+    <div className="font-sans min-h-screen bg-gray-50 text-[#1a1a1a]">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex items-center justify-between h-16">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-xl font-bold text-[#1a1a1a]"
+            >
+              Barber Baxha
+            </motion.div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              {[
+                { id: "home", label: "Главная", icon: HomeIcon },
+                { id: "gallery", label: "Галерея", icon: Scissors },
+                {
+                  id: "masterclasses",
+                  label: "Мастер-классы",
+                  icon: GraduationCap,
+                },
+                { id: "contacts", label: "Контакты", icon: MapPin },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-colors ${
+                      activeSection === item.id
+                        ? "bg-[#d4a762] text-black font-semibold"
+                        : "text-gray-700 hover:text-[#d4a762] hover:bg-gray-100"
+                    }`}
+                  >
+                    <Icon size={16} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden bg-white border-t border-gray-200 z-40"
+          >
+            <div
+              className="px-6 py-4 space-y-2"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {[
+                { id: "home", label: "Главная", icon: HomeIcon },
+                { id: "gallery", label: "Галерея", icon: Scissors },
+                {
+                  id: "masterclasses",
+                  label: "Мастер-классы",
+                  icon: GraduationCap,
+                },
+                { id: "contacts", label: "Контакты", icon: MapPin },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg transition-colors touch-manipulation ${
+                      activeSection === item.id
+                        ? "bg-[#d4a762] text-black font-semibold"
+                        : "text-gray-700 hover:text-[#d4a762] hover:bg-gray-100 active:bg-gray-200"
+                    }`}
+                  >
+                    <Icon size={18} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </nav>
+
+      {/* Hero */}
+      <header
+        id="home"
+        className="relative h-screen flex items-center justify-center bg-black text-white overflow-hidden"
+      >
+        <div className="absolute inset-0">
+          <Image
+            src="/gallery/bg.png"
+            alt="Интерьер барбершопа"
+            fill
+            className="object-cover opacity-70"
+            sizes="100vw"
+            quality={70}
+            priority
+          />
+          <motion.div
+            className="absolute inset-0 bg-black"
+            initial={{ opacity: 0.35 }}
+            animate={{ opacity: [0.35, 0.5, 0.35] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Плавающие элементы - только для десктопа */}
+          <motion.div
+            className="hidden md:block absolute top-1/4 left-1/4 w-2 h-2 bg-[#d4a762] rounded-full opacity-40"
+            animate={{
+              y: [-10, 10, -10],
+              opacity: [0.4, 0.8, 0.4],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+        <div className="relative z-10 text-center px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.16, 1, 0.3, 1],
+              delay: 0.2,
+            }}
+            className="mb-8"
+          >
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-4xl md:text-6xl font-bold mb-4 relative"
+            >
+              Баха Бабаджанов
+            </motion.h1>
+          </motion.div>
+
+          <p className="text-xl md:text-2xl mb-8">Я стригу и обучаю мастеров</p>
+          <Link
+            href="https://wa.me/79991234567"
+            target="_blank"
+            className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-8 rounded-full text-lg transition inline-block"
+          >
+            Записаться
+          </Link>
+        </div>
+      </header>
+
+      <main>
+        {/* About */}
+        <section id="about" className="mx-auto max-w-6xl px-6 py-20 pt-24">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid gap-10 sm:grid-cols-2 items-center"
+          >
+            <motion.div variants={item}>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-3xl font-bold mb-6"
+              >
+                Обо мне
+              </motion.h2>
+              <p className="mt-0 text-lg text-gray-700 leading-relaxed">
+                Привет! Я — профессиональный барбер с опытом более X лет.
+                Специализируюсь на мужских стрижках, классических и современных
+                фейдах, уходе за бородой и индивидуальном подборе стиля.
+              </p>
+              <p className="mt-0 text-lg text-gray-700 leading-relaxed">
+                ✂️ Моя миссия
+                <br /> Сделать так, чтобы каждый клиент чувствовал уверенность в
+                себе после стрижки. Для меня барберинг — это не просто работа, а
+                искусство и способ подчеркнуть твою индивидуальность.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={item}
+              className="relative aspect-[4/3] w-full"
+            >
+              <Image
+                src="/gallery/hero.png"
+                alt="Барбер за работой"
+                fill
+                className="object-cover rounded-lg shadow-xl"
+                sizes="(max-width: 640px) 100vw, 50vw"
+                quality={70}
+              />
+            </motion.div>
+          </motion.div>
+        </section>
+
+        {/* Gallery */}
+        <section id="gallery" className="py-20 pt-24 px-6">
+          <div className="mx-auto max-w-6xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl font-bold mb-6 text-center"
+            >
+              Мои работы
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto"
+            >
+              Примеры моих работ: от классических стрижек до современных
+              трендов. Каждая стрижка выполняется с вниманием к деталям и
+              индивидуальным подходом к клиенту.
+            </motion.p>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+                },
+              }}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.1 }}
+              className="grid grid-cols-2 md:grid-cols-3 gap-4"
+            >
+              {[
+                // 1 — барбершоп интерьер
+                "/gallery/1.png",
+                // остальное — мужские стрижки
+                "/gallery/2.png",
+                "/gallery/3.png",
+                "/gallery/4.png",
+                "/gallery/5.png",
+                "/gallery/6.png",
+              ].map((src, i) => (
+                <motion.div
+                  key={i}
+                  variants={galleryItem}
+                  className="relative w-full h-64 cursor-pointer group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                  onClick={() => openGalleryModal(i)}
+                  whileHover={{
+                    scale: 1.02,
+                  }}
+                  transition={{
+                    duration: 0.2,
+                    ease: "easeOut",
+                  }}
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={src}
+                      alt={
+                        i === 0 ? "Интерьер барбершопа" : `Мужская стрижка ${i}`
+                      }
+                      fill
+                      className="object-cover transition-all duration-300 group-hover:brightness-105"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      quality={70}
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                    <ZoomIn
+                      className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      size={32}
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Masterclasses */}
+        <section id="masterclasses" className="py-20 pt-24 bg-gray-100 px-6">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-3xl font-bold mb-12 text-center sm:text-left text-[#1a1a1a]">
+                  Мастер-классы
+                </h2>
+                <p className="text-xl text-center sm:text-left mb-12">
+                  Обучайтесь у профессионала! Поделитесь опытом и освоите новые
+                  техники барберинга.
+                </p>
+              </div>
+              <Link
+                href="https://t.me/barber_baxha"
+                target="_blank"
+                className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-6 py-3 pb-4 md:pb-3 text-white font-bold hover:bg-gray-800 transition mb-6"
+              >
+                Записаться на мастер-класс
+              </Link>
+            </div>
+
+            <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-xl font-bold mb-2">
+                  15 октября 2025, 14:00
+                </h4>
+                <p className="text-gray-600 mb-4">
+                  Тема: Современные мужские стрижки
+                </p>
+                <p className="text-lg font-bold text-[#d4a762]">Места: 5/10</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-xl font-bold mb-2">
+                  20 октября 2025, 11:00
+                </h4>
+                <p className="text-gray-600 mb-4">
+                  Тема: Уход и стайлинг бороды
+                </p>
+                <p className="text-lg font-bold text-[#d4a762]">Места: 8/12</p>
+              </div>
+            </div>
+            <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-xl font-bold mb-4">
+                  Современные мужские стрижки
+                </h4>
+                <p className="text-gray-700">
+                  Практический мастер-класс по техникам фейдинга,
+                  текстурирования и стайлинга. Длительность: 4 часа.
+                  Демонстрация и самостоятельная практика.
+                </p>
+                <p className="text-lg font-bold text-[#d4a762] mb-0">
+                  Стоимость: 5000 ₽
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h4 className="text-xl font-bold mb-4">
+                  Уход и стайлинг бороды
+                </h4>
+                <p className="text-gray-700">
+                  Формование контуров, масла и инструменты для идеальной бороды.
+                  Длительность: 3 часа. Теория + практика.
+                </p>
+                <p className="text-lg font-bold text-[#d4a762] mb-0">
+                  Стоимость: 4000 ₽
+                </p>
+              </div>
+            </div>
+
+            {/* Полный курс обучения */}
+            <div className="mb-16 bg-white p-8 rounded-lg shadow-xl">
+              <h3 className="text-2xl font-bold mb-6 text-center">
+                Курс обучения барберов с нуля
+              </h3>
+              <p className="text-lg text-gray-700 mb-8 text-center">
+                Комплексная программа для начинающих барберов. Изучите все
+                аспекты профессии от базовых техник до работы с клиентами.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-xl font-bold mb-6 text-[#1a1a1a]">
+                    В программу обучения ВХОДЯТ:
+                  </h4>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Коммерческие мужские стрижки</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Фэйдинг и работа машинками</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Удлиненные стрижки и работа ножницами</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Укладки и подбор стайлинга</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Создание текстур</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Оформление бороды и работа бритвой</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Сервис осуществления услуг</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Фотография своих работ</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#d4a762] font-bold">•</span>
+                      <span>Классическое бритье головы и лица</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden">
+                    <Image
+                      src="/education/educ1.png"
+                      alt="Обучение барберингу"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                      quality={80}
+                    />
+                  </div>
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden">
+                    <Image
+                      src="/education/educ2.png"
+                      alt="Практические занятия"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                      quality={80}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 text-center">
+                <Link
+                  href="https://t.me/barber_baxha"
+                  target="_blank"
+                  className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-8 py-4 text-white font-bold hover:bg-gray-800 transition text-lg"
+                >
+                  Записаться на полный курс
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Reviews */}
+        <section id="reviews" className="py-20 pt-24 bg-gray-100 px-6">
+          <div className="mx-auto max-w-6xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl font-bold mb-12 text-center"
+            >
+              Отзывы учеников
+            </motion.h2>
+            <div
+              ref={reviewsRef}
+              className="md:grid md:grid-cols-3 md:gap-8 flex md:flex-none gap-4 overflow-x-auto pr-2 touch-pan-x"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={() => setIsPaused(true)}
+              onTouchEnd={() => setIsPaused(false)}
+            >
+              {[
+                {
+                  name: "Алексей",
+                  text: "Отличный мастер-класс по мужским стрижкам! Научился техникам фейдинга, которые теперь использую в своей работе.",
+                },
+                {
+                  name: "Дмитрий",
+                  text: "Прошел курс по уходу за бородой. Получил много практических навыков и качественных инструментов для работы.",
+                },
+                {
+                  name: "Игорь",
+                  text: "Прекрасный преподаватель! Объясняет все доступно, показывает на практике. Рекомендую всем барберам.",
+                },
+                {
+                  name: "Сергей",
+                  text: "Мастер-класс превзошел ожидания. Узнал секреты профессионального стайлинга и текстурирования волос.",
+                },
+                {
+                  name: "Павел",
+                  text: "После курса мои клиенты стали намного довольнее результатом. Спасибо за ценные знания!",
+                },
+                {
+                  name: "Никита",
+                  text: "Инвестиция в образование, которая окупилась за месяц! Теперь работаю с большей уверенностью.",
+                },
+              ].map((r) => (
+                <div
+                  key={r.name}
+                  className="bg-white p-6 rounded-lg shadow-md min-w-[85%] md:min-w-0"
+                >
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-[#d4a762]/20 text-[#1a1a1a] mr-4 flex items-center justify-center font-bold">
+                      {r.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="font-bold">{r.name}</h4>
+                    </div>
+                  </div>
+                  <p className="text-gray-700">“{r.text}”</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contacts */}
+        <section id="contacts" className="py-20 pt-24 px-6">
+          <div className="mx-auto max-w-6xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl font-bold mb-12 text-center"
+            >
+              Контакты
+            </motion.h2>
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-6">Как записаться</h3>
+                <div className="space-y-4">
+                  <p className="flex items-center justify-center gap-2 text-lg">
+                    <Phone size={20} className="text-[#d4a762]" />
+                    <span>+7 (999) 123-45-67</span>
+                  </p>
+                  <p className="text-lg">WhatsApp: +7 (999) 123-45-67</p>
+                  <p className="text-lg">Telegram: @barber_baxha</p>
+                </div>
+              </div>
+              <Link
+                href="https://wa.me/79991234567"
+                target="_blank"
+                className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-4 px-12 rounded-full text-xl transition inline-block"
+              >
+                Записаться онлайн
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-[#1a1a1a] text-white py-12 px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+              <h3 className="text-2xl font-bold mb-2">Barber Baxha</h3>
+              <p>© 2025 Все права защищены</p>
+            </div>
+            <div className="flex items-center gap-6 text-lg">
+              <Link href="#" className="hover:text-[#d4a762]">
+                Instagram
+              </Link>
+              <Link
+                href="https://t.me/barber_baxha"
+                target="_blank"
+                className="hover:text-[#d4a762]"
+              >
+                Telegram
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
+
+      {/* Gallery Modal */}
+      {selectedImage !== null && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={closeGalleryModal}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            className="relative max-w-4xl max-h-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeGalleryModal}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+            >
+              <X size={32} />
+            </button>
+
+            <button
+              onClick={() => navigateGallery("prev")}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
+            >
+              <ChevronLeft size={32} />
+            </button>
+
+            <button
+              onClick={() => navigateGallery("next")}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
+            >
+              <ChevronRight size={32} />
+            </button>
+
+            <Image
+              src={
+                [
+                  "/gallery/1.png",
+                  "/gallery/2.png",
+                  "/gallery/3.png",
+                  "/gallery/4.png",
+                  "/gallery/5.png",
+                  "/gallery/6.png",
+                ][selectedImage]
+              }
+              alt={
+                selectedImage === 0
+                  ? "Интерьер барбершопа"
+                  : `Мужская стрижка ${selectedImage}`
+              }
+              width={800}
+              height={600}
+              className="rounded-lg shadow-2xl"
+              quality={90}
+            />
+
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-center">
+              <p className="text-lg font-semibold">
+                {selectedImage === 0
+                  ? "Интерьер барбершопа"
+                  : `Работа ${selectedImage}`}
+              </p>
+              <p className="text-sm text-gray-300">{selectedImage + 1} из 6</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }

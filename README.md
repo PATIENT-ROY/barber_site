@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Barber Baxha - Сайт барбера и обучения
 
-## Getting Started
+Современный сайт барбера с возможностью записи на стрижки и мастер-классы.
 
-First, run the development server:
+## 🚀 Особенности
+
+- **Адаптивный дизайн** - отлично работает на мобильных и десктопах
+- **Крутые анимации** - оптимизированы для мобильных устройств
+- **Интерактивная галерея** - модальное окно с навигацией
+- **Мастер-классы** - полная программа обучения барберов
+- **Быстрая запись** - интеграция с Telegram и WhatsApp
+
+## 🛠 Технологии
+
+- **Next.js 15** - React фреймворк
+- **TypeScript** - типизация
+- **Tailwind CSS** - стилизация
+- **Framer Motion** - анимации
+- **Lucide React** - иконки
+
+## 📱 Мобильная оптимизация
+
+- Упрощенные анимации для лучшей производительности
+- Touch-friendly интерфейс
+- Быстрая загрузка на слабых устройствах
+
+## 🎨 Секции сайта
+
+1. **Hero** - главная секция с анимированным заголовком
+2. **Галерея** - работы барбера с модальным просмотром
+3. **Мастер-классы** - программа обучения с фотографиями
+4. **Отзывы** - отзывы учеников с автоскроллом
+5. **Контакты** - способы записи
+
+## 🚀 Запуск проекта
 
 ```bash
+# Установка зависимостей
+npm install
+
+# Запуск в режиме разработки
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Сборка для продакшена
+npm run build
+
+# Запуск продакшен версии
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📦 Деплой на Netlify
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Подключите репозиторий к Netlify
+2. Настройки сборки:
+   - Build command: `npm run build`
+   - Publish directory: `out`
+3. Добавьте переменные окружения (если нужны)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔗 Контакты
 
-## Learn More
+- **Telegram**: @barber_baxha
+- **WhatsApp**: +7 (999) 123-45-67
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Лицензия
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© 2025 Все права защищены
