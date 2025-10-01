@@ -54,6 +54,40 @@ const galleryItem: Variants = {
   },
 };
 
+// Общие варианты анимации
+const fadeInFromLeft: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
+};
+
+const fadeInFromBottom: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const fadeInWithScale: Variants = {
+  hidden: { opacity: 0, scale: 0.8, y: 30 },
+  visible: { opacity: 1, scale: 1, y: 0 },
+};
+
+const modalOverlay: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
+const modalContent: Variants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: { scale: 1, opacity: 1 },
+  exit: { scale: 0.8, opacity: 0 },
+};
+
+const slideDown: Variants = {
+  hidden: { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
+
 export default function Home() {
   const reviewsRef = useRef<HTMLDivElement | null>(null);
   const [activeSection, setActiveSection] = useState("home");
@@ -198,8 +232,9 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex items-center justify-between h-16">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              variants={fadeInFromLeft}
+              initial="hidden"
+              animate="visible"
               transition={{ duration: 0.5 }}
               className="text-xl font-bold text-[#1a1a1a] hover:text-[#d4a762] transition-colors cursor-pointer"
               onClick={() => window.location.reload()}
@@ -250,9 +285,10 @@ export default function Home() {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            variants={slideDown}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             transition={{ duration: 0.2 }}
             className="md:hidden bg-white border-t border-gray-200 z-40"
           >
@@ -339,8 +375,9 @@ export default function Home() {
         <div className="relative z-10 text-center px-6">
           {/* Main Title - появляется вторым */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            variants={fadeInWithScale}
+            initial="hidden"
+            animate="visible"
             transition={{
               duration: 0.8,
               ease: [0.25, 0.46, 0.45, 0.94],
@@ -361,8 +398,9 @@ export default function Home() {
           {/* Subtitle - появляется третьим */}
           <motion.p
             className="text-xl md:text-2xl mb-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            variants={fadeInFromBottom}
+            initial="hidden"
+            animate="visible"
             transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
           >
             Я стригу и обучаю мастеров <br /> «Профессиональный барбер с 15+ лет
@@ -371,13 +409,15 @@ export default function Home() {
 
           {/* Button - появляется последним */}
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            variants={fadeInWithScale}
+            initial="hidden"
+            animate="visible"
             transition={{ duration: 0.6, delay: 1.3, ease: "easeOut" }}
           >
             <Link
               href="https://t.me/barber_baxha"
               target="_blank"
+              aria-label="Записаться на стрижку в Telegram"
               className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-8 rounded-full text-lg transition inline-block"
             >
               Записаться
@@ -484,7 +524,7 @@ export default function Home() {
                 "/gallery/6.png",
               ].map((src, i) => (
                 <motion.div
-                  key={i}
+                  key={src}
                   variants={galleryItem}
                   className="relative w-full h-64 cursor-pointer group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
                   onClick={() => openGalleryModal(i)}
@@ -500,7 +540,17 @@ export default function Home() {
                     <Image
                       src={src}
                       alt={
-                        i === 0 ? "Интерьер барбершопа" : `Мужская стрижка ${i}`
+                        i === 0
+                          ? "Современный интерьер барбершопа с зеркалами и креслами"
+                          : i === 1
+                          ? "Классическая мужская стрижка с аккуратными линиями"
+                          : i === 2
+                          ? "Модная стрижка с фейдом и укладкой"
+                          : i === 3
+                          ? "Стильная мужская прическа с текстурой"
+                          : i === 4
+                          ? "Профессиональная стрижка и оформление бороды"
+                          : "Качественная мужская стрижка от мастера"
                       }
                       fill
                       className="object-cover transition-all duration-300 group-hover:brightness-105"
@@ -536,6 +586,7 @@ export default function Home() {
               <Link
                 href="https://t.me/barber_baxha"
                 target="_blank"
+                aria-label="Записаться на мастер-класс барберинга в Telegram"
                 className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-6 py-3 pb-4 md:pb-3 text-white font-bold hover:bg-gray-800 transition mb-6"
               >
                 Записаться на мастер-класс
@@ -673,6 +724,7 @@ export default function Home() {
                 <Link
                   href="https://t.me/barber_baxha"
                   target="_blank"
+                  aria-label="Записаться на полный курс обучения барберинга в Telegram"
                   className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-8 py-4 text-white font-bold hover:bg-gray-800 transition text-lg"
                 >
                   Записаться на полный курс
@@ -770,8 +822,9 @@ export default function Home() {
                 </div>
               </div>
               <Link
-                href="https://wa.me/79991234567"
+                href="https://t.me/barber_baxha"
                 target="_blank"
+                aria-label="Записаться на онлайн консультацию в Telegram"
                 className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-4 px-12 rounded-full text-xl transition inline-block"
               >
                 Записаться онлайн
@@ -813,16 +866,18 @@ export default function Home() {
       {/* Gallery Modal */}
       {selectedImage !== null && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          variants={modalOverlay}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
           onClick={closeGalleryModal}
         >
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
+            variants={modalContent}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className="relative max-w-4xl max-h-full"
             onClick={(e) => e.stopPropagation()}
           >
@@ -860,8 +915,16 @@ export default function Home() {
               }
               alt={
                 selectedImage === 0
-                  ? "Интерьер барбершопа"
-                  : `Мужская стрижка ${selectedImage}`
+                  ? "Современный интерьер барбершопа с зеркалами и креслами"
+                  : selectedImage === 1
+                  ? "Классическая мужская стрижка с аккуратными линиями"
+                  : selectedImage === 2
+                  ? "Модная стрижка с фейдом и укладкой"
+                  : selectedImage === 3
+                  ? "Стильная мужская прическа с текстурой"
+                  : selectedImage === 4
+                  ? "Профессиональная стрижка и оформление бороды"
+                  : "Качественная мужская стрижка от мастера"
               }
               width={800}
               height={600}
