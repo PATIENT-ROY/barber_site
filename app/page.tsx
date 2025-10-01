@@ -104,7 +104,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "gallery", "masterclasses", "contacts"];
+      const sections = ["home", "about", "masterclasses", "contacts"];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -211,7 +211,7 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-8">
               {[
                 { id: "home", label: "Главная", icon: HomeIcon },
-                { id: "gallery", label: "Галерея", icon: Scissors },
+                { id: "about", label: "Обо мне", icon: HomeIcon },
                 {
                   id: "masterclasses",
                   label: "Мастер-классы",
@@ -262,7 +262,7 @@ export default function Home() {
             >
               {[
                 { id: "home", label: "Главная", icon: HomeIcon },
-                { id: "gallery", label: "Галерея", icon: Scissors },
+                { id: "about", label: "Обо мне", icon: HomeIcon },
                 {
                   id: "masterclasses",
                   label: "Мастер-классы",
