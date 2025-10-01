@@ -372,7 +372,7 @@ export default function Home() {
           }}
         />
 
-        <div className="relative z-10 text-center px-6">
+        <div className="relative z-10 text-center px-4 sm:px-6">
           {/* Main Title - появляется вторым */}
           <motion.div
             variants={fadeInWithScale}
@@ -389,7 +389,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="text-4xl md:text-6xl font-bold mb-4 relative"
+              className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 relative font-serif tracking-tight"
             >
               Баха Бабаджанов
             </motion.h1>
@@ -397,7 +397,7 @@ export default function Home() {
 
           {/* Subtitle - появляется третьим */}
           <motion.p
-            className="text-xl md:text-2xl mb-8"
+            className="text-lg sm:text-xl md:text-2xl mb-8 px-4 sm:px-0"
             variants={fadeInFromBottom}
             initial="hidden"
             animate="visible"
@@ -418,7 +418,7 @@ export default function Home() {
               href="https://t.me/barber_baxha"
               target="_blank"
               aria-label="Записаться на стрижку в Telegram"
-              className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-8 rounded-full text-lg transition inline-block"
+              className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg transition inline-block"
             >
               Записаться
             </Link>
@@ -428,7 +428,7 @@ export default function Home() {
 
       <main>
         {/* About */}
-        <section id="about" className="mx-auto max-w-6xl px-6 py-20 pt-24">
+        <section id="about" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 pt-20 sm:pt-24">
           <motion.div
             variants={container}
             initial="hidden"
@@ -441,25 +441,25 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-3xl font-bold mb-6"
+                className="text-2xl sm:text-3xl font-bold mb-6 font-serif tracking-tight"
               >
                 Обо мне
               </motion.h2>
-              <p className="mt-0 text-lg text-gray-700 leading-relaxed mb-6">
+              <p className="mt-0 text-base sm:text-lg text-gray-700 leading-7 mb-6">
                 Привет! Я — профессиональный барбер с опытом более X лет.
                 Специализируюсь на мужских стрижках, классических и современных
-                фейдах, уходе за бородой и индивидуальном подборе стиля.
+                фейдах, уходе за бородой и индивидуальном подборе стиля
               </p>
 
-              <div className="bg-[#d4a762]/10 p-6 rounded-lg border-l-4 border-[#d4a762]">
-                <h3 className="text-xl font-bold text-[#1a1a1a] mb-3 flex items-center gap-2">
-                  <span className="text-2xl">✂️</span>
+              <div className="bg-[#d4a762]/10 p-4 sm:p-6 rounded-lg border-l-4 border-[#d4a762]">
+                <h3 className="text-lg sm:text-xl font-bold text-[#1a1a1a] mb-3 flex items-center gap-2 font-serif">
+                  <span className="text-xl sm:text-2xl">✂️</span>
                   Моя миссия
                 </h3>
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-base sm:text-lg text-gray-700 leading-7">
                   Сделать так, чтобы каждый клиент чувствовал уверенность в себе
                   после стрижки. Для меня барберинг — это не просто работа, а
-                  искусство и способ подчеркнуть твою индивидуальность.
+                  искусство и способ подчеркнуть твою индивидуальность
                 </p>
               </div>
             </motion.div>
@@ -480,13 +480,13 @@ export default function Home() {
         </section>
 
         {/* Gallery */}
-        <section id="gallery" className="py-20 pt-24 px-6">
+        <section id="gallery" className="py-16 sm:py-20 pt-20 sm:pt-24 px-4 sm:px-6">
           <div className="mx-auto max-w-6xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-3xl font-bold mb-6 text-center"
+              className="text-2xl sm:text-3xl font-bold mb-6 text-center font-serif tracking-tight"
             >
               Мои работы
             </motion.h2>
@@ -494,11 +494,11 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto"
+              className="text-base sm:text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto px-4"
             >
               Примеры моих работ: от классических стрижек до современных
               трендов. Каждая стрижка выполняется с вниманием к деталям и
-              индивидуальным подходом к клиенту.
+              индивидуальным подходом к клиенту
             </motion.p>
             <motion.div
               variants={{
@@ -511,7 +511,7 @@ export default function Home() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.1 }}
-              className="grid grid-cols-2 md:grid-cols-3 gap-4"
+              className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
             >
               {[
                 // 1 — барбершоп интерьер
@@ -526,7 +526,7 @@ export default function Home() {
                 <motion.div
                   key={src}
                   variants={galleryItem}
-                  className="relative w-full h-64 cursor-pointer group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                  className="relative w-full h-48 sm:h-64 cursor-pointer group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
                   onClick={() => openGalleryModal(i)}
                   whileHover={{
                     scale: 1.02,
@@ -575,12 +575,12 @@ export default function Home() {
           <div className="mx-auto max-w-6xl px-6">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-3xl font-bold mb-12 text-center sm:text-left text-[#1a1a1a]">
+                <h2 className="text-3xl font-bold mb-12 text-center sm:text-left text-[#1a1a1a] font-serif tracking-tight">
                   Мастер-классы
                 </h2>
                 <p className="text-xl text-center sm:text-left mb-12">
                   Обучайтесь у профессионала! Поделитесь опытом и освоите новые
-                  техники барберинга.
+                  техники барберинга
                 </p>
               </div>
               <Link
@@ -615,26 +615,27 @@ export default function Home() {
             </div>
             <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-xl font-bold mb-4">
+                <h4 className="text-xl font-bold mb-4 font-serif tracking-tight">
                   Современные мужские стрижки
                 </h4>
-                <p className="text-gray-700">
-                  Практический мастер-класс по техникам фейдинга,
-                  текстурирования и стайлинга. Длительность: 4 часа.
-                  Демонстрация и самостоятельная практика.
-                </p>
+                <div className="text-gray-700 space-y-2">
+                  <p>Практический мастер-класс по техникам фейдинга, текстурирования и стайлинга</p>
+                  <p><strong>Длительность:</strong> 4 часа</p>
+                  <p><strong>Программа:</strong> Демонстрация и самостоятельная практика</p>
+                </div>
                 <p className="text-lg font-bold text-[#d4a762] mb-0">
                   Стоимость: 5000 ₽
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h4 className="text-xl font-bold mb-4">
+                <h4 className="text-xl font-bold mb-4 font-serif tracking-tight">
                   Уход и стайлинг бороды
                 </h4>
-                <p className="text-gray-700">
-                  Формование контуров, масла и инструменты для идеальной бороды.
-                  Длительность: 3 часа. Теория + практика.
-                </p>
+                <div className="text-gray-700 space-y-2">
+                  <p>Формование контуров, масла и инструменты для идеальной бороды</p>
+                  <p><strong>Длительность:</strong> 3 часа</p>
+                  <p><strong>Программа:</strong> Теория + практика</p>
+                </div>
                 <p className="text-lg font-bold text-[#d4a762] mb-0">
                   Стоимость: 4000 ₽
                 </p>
@@ -643,17 +644,17 @@ export default function Home() {
 
             {/* Полный курс обучения */}
             <div className="mb-16 bg-white p-8 rounded-lg shadow-xl">
-              <h3 className="text-2xl font-bold mb-6 text-center">
+              <h3 className="text-2xl font-bold mb-6 text-center font-serif tracking-tight">
                 Курс обучения барберов с нуля
               </h3>
-              <p className="text-lg text-gray-700 mb-8 text-center">
-                Комплексная программа для начинающих барберов. Изучите все
-                аспекты профессии от базовых техник до работы с клиентами.
-              </p>
+              <div className="text-lg text-gray-700 mb-8 text-center space-y-2">
+                <p>Комплексная программа для начинающих барберов</p>
+                <p>Изучите все аспекты профессии от базовых техник до работы с клиентами</p>
+              </div>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="text-xl font-bold mb-6 text-[#1a1a1a]">
+                  <h4 className="text-xl font-bold mb-6 text-[#1a1a1a] font-serif tracking-tight">
                     В программу обучения ВХОДЯТ:
                   </h4>
                   <ul className="space-y-3">
@@ -694,6 +695,12 @@ export default function Home() {
                       <span>Классическое бритье головы и лица</span>
                     </li>
                   </ul>
+                  
+                  <div className="mt-6 space-y-3">
+                    <p className="text-gray-700"><strong>Длительность:</strong> 40 часов</p>
+                    <p className="text-gray-700"><strong>Формат:</strong> Индивидуальные занятия</p>
+                    <p className="text-gray-700"><strong>Результат:</strong> Готовность к работе с клиентами</p>
+                  </div>
                 </div>
 
                 <div className="space-y-4">
@@ -839,8 +846,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <h3
-                className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer"
+              <h3 
+                className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer font-serif tracking-tight"
                 onClick={() => window.location.reload()}
               >
                 Barber Baxha
