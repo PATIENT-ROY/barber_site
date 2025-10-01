@@ -81,10 +81,10 @@ export default function Home() {
     (direction: "prev" | "next") => {
       if (selectedImage === null) return;
       const images = [
-        "/gallery/1.png",
-        "/gallery/2.png",
-        "/gallery/3.png",
-        "/gallery/4.png",
+        "/gallery/1_optimized.jpg",
+        "/gallery/2_optimized.jpg",
+        "/gallery/3_optimized.jpg",
+        "/gallery/4_optimized.jpg",
         "/gallery/5.png",
         "/gallery/6.png",
       ];
@@ -201,7 +201,8 @@ export default function Home() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-xl font-bold text-[#1a1a1a]"
+              className="text-xl font-bold text-[#1a1a1a] hover:text-[#d4a762] transition-colors cursor-pointer"
+              onClick={() => window.location.reload()}
             >
               Barber Baxha
             </motion.div>
@@ -295,9 +296,15 @@ export default function Home() {
         id="home"
         className="relative h-screen flex items-center justify-center bg-black text-white overflow-hidden"
       >
-        <div className="absolute inset-0">
+        {/* Background Image - появляется первым */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <Image
-            src="/gallery/bg.png"
+            src="/gallery/bg_optimized.jpg"
             alt="Интерьер барбершопа"
             fill
             className="object-cover opacity-70"
@@ -307,54 +314,75 @@ export default function Home() {
           />
           <motion.div
             className="absolute inset-0 bg-black"
-            initial={{ opacity: 0.35 }}
-            animate={{ opacity: [0.35, 0.5, 0.35] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.35 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           />
+        </motion.div>
 
-          {/* Плавающие элементы - только для десктопа */}
-          <motion.div
-            className="hidden md:block absolute top-1/4 left-1/4 w-2 h-2 bg-[#d4a762] rounded-full opacity-40"
-            animate={{
-              y: [-10, 10, -10],
-              opacity: [0.4, 0.8, 0.4],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </div>
+        {/* Floating elements - появляются после фона */}
+        <motion.div
+          className="hidden md:block absolute top-1/4 left-1/4 w-2 h-2 bg-[#d4a762] rounded-full opacity-40"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: [0.4, 0.8, 0.4],
+            scale: [1, 1.2, 1],
+            y: [-10, 10, -10],
+          }}
+          transition={{
+            opacity: { duration: 0.8, delay: 0.8 },
+            scale: { duration: 0.8, delay: 0.8 },
+            y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 },
+          }}
+        />
+
         <div className="relative z-10 text-center px-6">
+          {/* Main Title - появляется вторым */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
               duration: 0.8,
-              ease: [0.16, 1, 0.3, 1],
-              delay: 0.2,
+              ease: [0.25, 0.46, 0.45, 0.94],
+              delay: 0.6,
             }}
             className="mb-8"
           >
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
               className="text-4xl md:text-6xl font-bold mb-4 relative"
             >
               Баха Бабаджанов
             </motion.h1>
           </motion.div>
 
-          <p className="text-xl md:text-2xl mb-8">Я стригу и обучаю мастеров</p>
-          <Link
-            href="https://wa.me/79991234567"
-            target="_blank"
-            className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-8 rounded-full text-lg transition inline-block"
+          {/* Subtitle - появляется третьим */}
+          <motion.p
+            className="text-xl md:text-2xl mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
           >
-            Записаться
-          </Link>
+            Я стригу и обучаю мастеров <br /> «Профессиональный барбер с 15+ лет
+            опыта. Индивидуальный стиль, современная техника и атмосфера.»
+          </motion.p>
+
+          {/* Button - появляется последним */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 1.3, ease: "easeOut" }}
+          >
+            <Link
+              href="https://t.me/barber_baxha"
+              target="_blank"
+              className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-8 rounded-full text-lg transition inline-block"
+            >
+              Записаться
+            </Link>
+          </motion.div>
         </div>
       </header>
 
@@ -377,17 +405,23 @@ export default function Home() {
               >
                 Обо мне
               </motion.h2>
-              <p className="mt-0 text-lg text-gray-700 leading-relaxed">
+              <p className="mt-0 text-lg text-gray-700 leading-relaxed mb-6">
                 Привет! Я — профессиональный барбер с опытом более X лет.
                 Специализируюсь на мужских стрижках, классических и современных
                 фейдах, уходе за бородой и индивидуальном подборе стиля.
               </p>
-              <p className="mt-0 text-lg text-gray-700 leading-relaxed">
-                ✂️ Моя миссия
-                <br /> Сделать так, чтобы каждый клиент чувствовал уверенность в
-                себе после стрижки. Для меня барберинг — это не просто работа, а
-                искусство и способ подчеркнуть твою индивидуальность.
-              </p>
+
+              <div className="bg-[#d4a762]/10 p-6 rounded-lg border-l-4 border-[#d4a762]">
+                <h3 className="text-xl font-bold text-[#1a1a1a] mb-3 flex items-center gap-2">
+                  <span className="text-2xl">✂️</span>
+                  Моя миссия
+                </h3>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Сделать так, чтобы каждый клиент чувствовал уверенность в себе
+                  после стрижки. Для меня барберинг — это не просто работа, а
+                  искусство и способ подчеркнуть твою индивидуальность.
+                </p>
+              </div>
             </motion.div>
             <motion.div
               variants={item}
@@ -441,11 +475,11 @@ export default function Home() {
             >
               {[
                 // 1 — барбершоп интерьер
-                "/gallery/1.png",
+                "/gallery/1_optimized.jpg",
                 // остальное — мужские стрижки
-                "/gallery/2.png",
-                "/gallery/3.png",
-                "/gallery/4.png",
+                "/gallery/2_optimized.jpg",
+                "/gallery/3_optimized.jpg",
+                "/gallery/4_optimized.jpg",
                 "/gallery/5.png",
                 "/gallery/6.png",
               ].map((src, i) => (
@@ -752,7 +786,12 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <h3 className="text-2xl font-bold mb-2">Barber Baxha</h3>
+              <h3
+                className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer"
+                onClick={() => window.location.reload()}
+              >
+                Barber Baxha
+              </h3>
               <p>© 2025 Все права защищены</p>
             </div>
             <div className="flex items-center gap-6 text-lg">
@@ -811,10 +850,10 @@ export default function Home() {
             <Image
               src={
                 [
-                  "/gallery/1.png",
-                  "/gallery/2.png",
-                  "/gallery/3.png",
-                  "/gallery/4.png",
+                  "/gallery/1_optimized.jpg",
+                  "/gallery/2_optimized.jpg",
+                  "/gallery/3_optimized.jpg",
+                  "/gallery/4_optimized.jpg",
                   "/gallery/5.png",
                   "/gallery/6.png",
                 ][selectedImage]

@@ -13,19 +13,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Barber Ivanov — Я стригу и обучаю мастеров",
+  title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
   description:
-    "Профессиональные мужские стрижки, обучение барберов с нуля. Москва. Запись в WhatsApp/Telegram.",
-  metadataBase: new URL("https://example.com"),
+    "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы. Москва. Запись в Telegram @barber_baxha",
+  metadataBase: new URL("https://barber-baxha.netlify.app"),
   openGraph: {
-    title: "Barber Ivanov — Я стригу и обучаю мастеров",
+    title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
     description:
-      "Профессиональные мужские стрижки, обучение барберов с нуля. Москва. Запись в WhatsApp/Telegram.",
+      "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы. Москва. Запись в Telegram @barber_baxha",
     type: "website",
-    url: "/",
+    url: "https://barber-baxha.netlify.app",
+    siteName: "Barber Baxha",
+    locale: "ru_RU",
     images: [
-      { url: "/barber-og.svg", width: 1200, height: 630, alt: "Barber Ivanov" },
+      {
+        url: "/gallery/hero_optimized.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Barber Baxha - Профессиональный барбер",
+      },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
+    description:
+      "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы.",
+    images: ["/gallery/hero.png"],
   },
   icons: {
     icon: "/scissors-icon.svg",
@@ -39,7 +53,27 @@ export const metadata: Metadata = {
     "борода",
     "барбершоп",
     "мастер-классы барбер",
+    "обучение барберов",
+    "Баха Бабаджанов",
+    "Barber Baxha",
+    "стрижки Москва",
+    "фейдинг",
+    "классическое бритье",
+    "уход за бородой",
   ],
+  authors: [{ name: "Баха Бабаджанов" }],
+  creator: "Баха Бабаджанов",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
