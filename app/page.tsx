@@ -94,6 +94,7 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [currentBgImage, setCurrentBgImage] = useState(0);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -225,6 +226,15 @@ export default function Home() {
     };
   }, [isPaused]);
 
+  // Background image transition effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgImage((prev) => (prev === 0 ? 1 : 0));
+    }, 5000); // Switch every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="font-sans min-h-screen bg-gray-50 text-[#1a1a1a]">
       {/* Navigation */}
@@ -332,29 +342,51 @@ export default function Home() {
         id="home"
         className="relative h-screen flex items-center justify-center bg-black text-white overflow-hidden"
       >
-        {/* Background Image - появляется первым */}
-        <motion.div
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <Image
-            src="/gallery/bg_optimized.jpg"
-            alt="Интерьер барбершопа"
-            fill
-            className="object-cover opacity-70"
-            sizes="100vw"
-            quality={70}
-            priority
-          />
+        {/* Background Images with smooth transition */}
+        <div className="absolute inset-0">
+          {/* First background image */}
+          <motion.div
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentBgImage === 0 ? 1 : 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          >
+            <Image
+              src="/gallery/bg_optimized.jpg"
+              alt="Интерьер барбершопа"
+              fill
+              className="object-cover opacity-70"
+              sizes="100vw"
+              quality={70}
+              priority
+            />
+          </motion.div>
+
+          {/* Second background image */}
+          <motion.div
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentBgImage === 1 ? 1 : 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          >
+            <Image
+              src="/gallery/bg1.png"
+              alt="Интерьер барбершопа"
+              fill
+              className="object-cover opacity-70"
+              sizes="100vw"
+              quality={70}
+            />
+          </motion.div>
+
+          {/* Dark overlay */}
           <motion.div
             className="absolute inset-0 bg-black"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.35 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           />
-        </motion.div>
+        </div>
 
         {/* Floating elements - появляются после фона */}
         <motion.div
@@ -428,7 +460,10 @@ export default function Home() {
 
       <main>
         {/* About */}
-        <section id="about" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 pt-20 sm:pt-24">
+        <section
+          id="about"
+          className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 pt-20 sm:pt-24"
+        >
           <motion.div
             variants={container}
             initial="hidden"
@@ -480,7 +515,10 @@ export default function Home() {
         </section>
 
         {/* Gallery */}
-        <section id="gallery" className="py-16 sm:py-20 pt-20 sm:pt-24 px-4 sm:px-6">
+        <section
+          id="gallery"
+          className="py-16 sm:py-20 pt-20 sm:pt-24 px-4 sm:px-6"
+        >
           <div className="mx-auto max-w-6xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -619,9 +657,17 @@ export default function Home() {
                   Современные мужские стрижки
                 </h4>
                 <div className="text-gray-700 space-y-2">
-                  <p>Практический мастер-класс по техникам фейдинга, текстурирования и стайлинга</p>
-                  <p><strong>Длительность:</strong> 4 часа</p>
-                  <p><strong>Программа:</strong> Демонстрация и самостоятельная практика</p>
+                  <p>
+                    Практический мастер-класс по техникам фейдинга,
+                    текстурирования и стайлинга
+                  </p>
+                  <p>
+                    <strong>Длительность:</strong> 4 часа
+                  </p>
+                  <p>
+                    <strong>Программа:</strong> Демонстрация и самостоятельная
+                    практика
+                  </p>
                 </div>
                 <p className="text-lg font-bold text-[#d4a762] mb-0">
                   Стоимость: 5000 ₽
@@ -632,9 +678,16 @@ export default function Home() {
                   Уход и стайлинг бороды
                 </h4>
                 <div className="text-gray-700 space-y-2">
-                  <p>Формование контуров, масла и инструменты для идеальной бороды</p>
-                  <p><strong>Длительность:</strong> 3 часа</p>
-                  <p><strong>Программа:</strong> Теория + практика</p>
+                  <p>
+                    Формование контуров, масла и инструменты для идеальной
+                    бороды
+                  </p>
+                  <p>
+                    <strong>Длительность:</strong> 3 часа
+                  </p>
+                  <p>
+                    <strong>Программа:</strong> Теория + практика
+                  </p>
                 </div>
                 <p className="text-lg font-bold text-[#d4a762] mb-0">
                   Стоимость: 4000 ₽
@@ -649,7 +702,10 @@ export default function Home() {
               </h3>
               <div className="text-lg text-gray-700 mb-8 text-center space-y-2">
                 <p>Комплексная программа для начинающих барберов</p>
-                <p>Изучите все аспекты профессии от базовых техник до работы с клиентами</p>
+                <p>
+                  Изучите все аспекты профессии от базовых техник до работы с
+                  клиентами
+                </p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -695,11 +751,18 @@ export default function Home() {
                       <span>Классическое бритье головы и лица</span>
                     </li>
                   </ul>
-                  
+
                   <div className="mt-6 space-y-3">
-                    <p className="text-gray-700"><strong>Длительность:</strong> 40 часов</p>
-                    <p className="text-gray-700"><strong>Формат:</strong> Индивидуальные занятия</p>
-                    <p className="text-gray-700"><strong>Результат:</strong> Готовность к работе с клиентами</p>
+                    <p className="text-gray-700">
+                      <strong>Длительность:</strong> 40 часов
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Формат:</strong> Индивидуальные занятия
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Результат:</strong> Готовность к работе с
+                      клиентами
+                    </p>
                   </div>
                 </div>
 
@@ -846,7 +909,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <h3 
+              <h3
                 className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer font-serif tracking-tight"
                 onClick={() => window.location.reload()}
               >
