@@ -421,7 +421,7 @@ export default function Home() {
               src="/gallery/bg_optimized.jpg"
               alt="Интерьер барбершопа"
               fill
-              className="object-cover opacity-70"
+              className="object-cover object-center md:object-[center_20%] opacity-70"
               sizes="100vw"
               quality={70}
               priority
@@ -439,7 +439,7 @@ export default function Home() {
               src="/gallery/bg1.png"
               alt="Интерьер барбершопа"
               fill
-              className="object-cover opacity-70"
+              className="object-cover object-center md:object-[center_20%] opacity-70"
               sizes="100vw"
               quality={70}
             />
@@ -577,13 +577,13 @@ export default function Home() {
             </motion.div>
             <motion.div
               variants={optimizedItem}
-              className="relative aspect-[4/3] w-full"
+              className="relative aspect-[3/4] w-full"
             >
               <Image
                 src="/gallery/hero.png"
                 alt="Барбер за работой"
                 fill
-                className="object-cover rounded-lg shadow-xl"
+                className="object-contain bg-gray-100 rounded-lg shadow-xl"
                 sizes="(max-width: 640px) 100vw, 50vw"
                 quality={70}
                 loading="lazy"
@@ -697,7 +697,7 @@ export default function Home() {
                           : "Качественная мужская стрижка от мастера"
                       }
                       fill
-                      className="object-cover transition-all duration-300 group-hover:brightness-105"
+                      className="object-cover object-center md:object-[center_25%] transition-all duration-300 group-hover:brightness-105"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       quality={70}
                       loading="lazy"
@@ -938,11 +938,11 @@ export default function Home() {
                   text: "Отличный мастер-класс по мужским стрижкам! Научился техникам фейдинга, которые теперь использую в своей работе.",
                 },
                 {
-                  name: "Дмитрий",
-                  text: "Прошел курс по уходу за бородой. Получил много практических навыков и качественных инструментов для работы.",
+                  name: "Анна",
+                  text: "Прошла курс по уходу за бородой. Получила много практических навыков и качественных инструментов для работы.",
                 },
                 {
-                  name: "Игорь",
+                  name: "Елена",
                   text: "Прекрасный преподаватель! Объясняет все доступно, показывает на практике. Рекомендую всем барберам.",
                 },
                 {
