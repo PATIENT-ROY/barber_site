@@ -300,7 +300,7 @@ export default function Home() {
               className="text-xl font-bold text-[#1a1a1a] hover:text-[#d4a762] transition-colors cursor-pointer"
               onClick={() => window.location.reload()}
             >
-              Barber Baxha
+              Barber Bakha
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -1022,7 +1022,7 @@ export default function Home() {
                 className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer font-serif tracking-tight"
                 onClick={() => window.location.reload()}
               >
-                Barber Baxha
+                Barber Bakha
               </h3>
               <p className="text-gray-300 mb-2">© 2025 Все права защищены</p>
               <p className="text-sm text-gray-400">

@@ -15,30 +15,30 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
+  title: "Barber Bakha — Профессиональные стрижки и обучение барберов",
   description:
     "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы. Москва. Запись в Telegram @barber_baxha",
   metadataBase: new URL("https://barber-baxha.netlify.app"),
   openGraph: {
-    title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
+    title: "Barber Bakha — Профессиональные стрижки и обучение барберов",
     description:
       "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы. Москва. Запись в Telegram @barber_baxha",
     type: "website",
     url: "https://barber-baxha.netlify.app",
-    siteName: "Barber Baxha",
+    siteName: "Barber Bakha",
     locale: "ru_RU",
     images: [
       {
         url: "/gallery/hero_optimized.jpg",
         width: 1200,
         height: 630,
-        alt: "Barber Baxha - Профессиональный барбер",
+        alt: "Barber Bakha - Профессиональный барбер",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Barber Baxha — Профессиональные стрижки и обучение барберов",
+    title: "Barber Bakha — Профессиональные стрижки и обучение барберов",
     description:
       "Баха Бабаджанов - профессиональный барбер. Мужские стрижки, обучение барберов с нуля, мастер-классы.",
     images: ["/gallery/hero.png"],
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     "мастер-классы барбер",
     "обучение барберов",
     "Баха Бабаджанов",
-    "Barber Baxha",
+    "Barber Bakha",
     "стрижки Москва",
     "фейдинг",
     "классическое бритье",
@@ -85,9 +85,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body
-        className={`${inter.variable} ${playfair.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         {children}
       </body>
     </html>
