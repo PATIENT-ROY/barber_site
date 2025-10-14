@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   Home as HomeIcon,
-  Scissors,
   GraduationCap,
   MapPin,
   ChevronLeft,
@@ -95,6 +94,46 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [currentBgImage, setCurrentBgImage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Optimized animation variants for mobile
+  const optimizedContainer: Variants = isMobile
+    ? {
+        hidden: { opacity: 0 },
+        show: {
+          opacity: 1,
+          transition: { staggerChildren: 0.08 }, // Faster stagger on mobile
+        },
+      }
+    : container;
+
+  const optimizedItem: Variants = isMobile
+    ? {
+        hidden: { opacity: 0, y: 20 }, // Reduced movement on mobile
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.4, // Shorter duration on mobile
+            ease: [0.16, 1, 0.3, 1],
+          },
+        },
+      }
+    : item;
+
+  const optimizedGalleryItem: Variants = isMobile
+    ? {
+        hidden: { opacity: 0, y: 20 }, // Reduced movement on mobile
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.3, // Shorter duration on mobile
+            ease: [0.16, 1, 0.3, 1],
+          },
+        },
+      }
+    : galleryItem;
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -226,6 +265,18 @@ export default function Home() {
     };
   }, [isPaused]);
 
+  // Detect mobile device for animation optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Background image transition effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -269,6 +320,8 @@ export default function Home() {
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
+                    role="button"
+                    aria-label={`Перейти к разделу ${item.label}`}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-colors ${
                       activeSection === item.id
                         ? "bg-[#d4a762] text-black font-semibold"
@@ -286,6 +339,13 @@ export default function Home() {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={
+                isMobileMenuOpen
+                  ? "Закрыть главное меню"
+                  : "Открыть главное меню"
+              }
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -301,10 +361,15 @@ export default function Home() {
             exit="exit"
             transition={{ duration: 0.2 }}
             className="md:hidden bg-white border-t border-gray-200 z-40"
+            id="mobile-menu"
+            aria-hidden={!isMobileMenuOpen}
+            role="navigation"
+            aria-label="Главное меню"
           >
             <div
               className="px-6 py-4 space-y-2"
               onClick={(e) => e.stopPropagation()}
+              role="menu"
             >
               {[
                 { id: "home", label: "Главная", icon: HomeIcon },
@@ -321,6 +386,7 @@ export default function Home() {
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
+                    role="menuitem"
                     className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg transition-colors touch-manipulation ${
                       activeSection === item.id
                         ? "bg-[#d4a762] text-black font-semibold"
@@ -411,16 +477,19 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             transition={{
-              duration: 0.8,
+              duration: isMobile ? 0.5 : 0.8, // Shorter on mobile
               ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.6,
+              delay: isMobile ? 0.3 : 0.6, // Faster on mobile
             }}
             className="mb-8"
           >
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+              transition={{
+                duration: isMobile ? 0.4 : 0.6,
+                delay: isMobile ? 0.5 : 0.8,
+              }}
               className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 relative font-serif tracking-tight"
             >
               Баха Бабаджанов
@@ -433,7 +502,11 @@ export default function Home() {
             variants={fadeInFromBottom}
             initial="hidden"
             animate="visible"
-            transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
+            transition={{
+              duration: isMobile ? 0.4 : 0.6,
+              delay: isMobile ? 0.7 : 1.0,
+              ease: "easeOut",
+            }}
           >
             Я стригу и обучаю мастеров <br /> «Профессиональный барбер с 15+ лет
             опыта. Индивидуальный стиль, современная техника и атмосфера.»
@@ -444,12 +517,16 @@ export default function Home() {
             variants={fadeInWithScale}
             initial="hidden"
             animate="visible"
-            transition={{ duration: 0.6, delay: 1.3, ease: "easeOut" }}
+            transition={{
+              duration: isMobile ? 0.4 : 0.6,
+              delay: isMobile ? 0.9 : 1.3,
+              ease: "easeOut",
+            }}
           >
             <Link
-              href="https://t.me/barber_baxha"
+              href="https://n70399.yclients.com/company/27708/personal/menu?o=m20847&fbclid=PARlRTSANbIyBleHRuA2FlbQIxMQABp9avW6DlOWpxW2W2EkH__LuWE1DmUKzklv3RTQqsgytGJPGTpsDOUvQo0SvR_aem_GUQa6L0WLR4cAdoDyFVnKw"
               target="_blank"
-              aria-label="Записаться на стрижку в Telegram"
+              aria-label="Записаться на стрижку онлайн"
               className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-3 px-6 sm:px-8 rounded-full text-base sm:text-lg transition inline-block"
             >
               Записаться
@@ -465,13 +542,13 @@ export default function Home() {
           className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20 pt-20 sm:pt-24"
         >
           <motion.div
-            variants={container}
+            variants={optimizedContainer}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
             className="grid gap-10 sm:grid-cols-2 items-center"
           >
-            <motion.div variants={item}>
+            <motion.div variants={optimizedItem}>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -499,7 +576,7 @@ export default function Home() {
               </div>
             </motion.div>
             <motion.div
-              variants={item}
+              variants={optimizedItem}
               className="relative aspect-[4/3] w-full"
             >
               <Image
@@ -509,6 +586,7 @@ export default function Home() {
                 className="object-cover rounded-lg shadow-xl"
                 sizes="(max-width: 640px) 100vw, 50vw"
                 quality={70}
+                loading="lazy"
               />
             </motion.div>
           </motion.div>
@@ -539,13 +617,29 @@ export default function Home() {
               индивидуальным подходом к клиенту
             </motion.p>
             <motion.div
-              variants={{
-                hidden: { opacity: 0 },
-                show: {
-                  opacity: 1,
-                  transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-                },
-              }}
+              variants={
+                isMobile
+                  ? {
+                      hidden: { opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.08,
+                          delayChildren: 0.1,
+                        }, // Faster on mobile
+                      },
+                    }
+                  : {
+                      hidden: { opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.15,
+                          delayChildren: 0.2,
+                        },
+                      },
+                    }
+              }
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.1 }}
@@ -563,16 +657,28 @@ export default function Home() {
               ].map((src, i) => (
                 <motion.div
                   key={src}
-                  variants={galleryItem}
+                  variants={optimizedGalleryItem}
                   className="relative w-full h-48 sm:h-64 cursor-pointer group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
                   onClick={() => openGalleryModal(i)}
-                  whileHover={{
-                    scale: 1.02,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                    ease: "easeOut",
-                  }}
+                  whileHover={
+                    isMobile
+                      ? {}
+                      : {
+                          // Disable hover animations on mobile
+                          scale: 1.02,
+                        }
+                  }
+                  transition={
+                    isMobile
+                      ? {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        }
+                      : {
+                          duration: 0.2,
+                          ease: "easeOut",
+                        }
+                  }
                 >
                   <div className="relative w-full h-full">
                     <Image
@@ -594,6 +700,7 @@ export default function Home() {
                       className="object-cover transition-all duration-300 group-hover:brightness-105"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       quality={70}
+                      loading="lazy"
                     />
                   </div>
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-lg flex items-center justify-center">
@@ -622,7 +729,7 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                href="https://t.me/barber_baxha"
+                href="https://t.me/Bakha2505"
                 target="_blank"
                 aria-label="Записаться на мастер-класс барберинга в Telegram"
                 className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-6 py-3 pb-4 md:pb-3 text-white font-bold hover:bg-gray-800 transition mb-6"
@@ -775,6 +882,7 @@ export default function Home() {
                       className="object-cover"
                       sizes="(max-width: 640px) 100vw, 50vw"
                       quality={80}
+                      loading="lazy"
                     />
                   </div>
                   <div className="relative w-full h-64 rounded-lg overflow-hidden">
@@ -785,6 +893,7 @@ export default function Home() {
                       className="object-cover"
                       sizes="(max-width: 640px) 100vw, 50vw"
                       quality={80}
+                      loading="lazy"
                     />
                   </div>
                 </div>
@@ -792,7 +901,7 @@ export default function Home() {
 
               <div className="mt-8 text-center">
                 <Link
-                  href="https://t.me/barber_baxha"
+                  href="https://t.me/Bakha2505"
                   target="_blank"
                   aria-label="Записаться на полный курс обучения барберинга в Telegram"
                   className="inline-flex items-center justify-center rounded-full bg-[#1a1a1a] px-8 py-4 text-white font-bold hover:bg-gray-800 transition text-lg"
@@ -888,13 +997,13 @@ export default function Home() {
                     <span>+7 (999) 123-45-67</span>
                   </p>
                   <p className="text-lg">WhatsApp: +7 (999) 123-45-67</p>
-                  <p className="text-lg">Telegram: @barber_baxha</p>
+                  <p className="text-lg">Telegram: @Bakha2505</p>
                 </div>
               </div>
               <Link
-                href="https://t.me/barber_baxha"
+                href="https://n70399.yclients.com/company/27708/personal/menu?o=m20847&fbclid=PARlRTSANbIyBleHRuA2FlbQIxMQABp9avW6DlOWpxW2W2EkH__LuWE1DmUKzklv3RTQqsgytGJPGTpsDOUvQo0SvR_aem_GUQa6L0WLR4cAdoDyFVnKw"
                 target="_blank"
-                aria-label="Записаться на онлайн консультацию в Telegram"
+                aria-label="Записаться на онлайн консультацию"
                 className="bg-[#d4a762] hover:bg-amber-600 text-black font-bold py-4 px-12 rounded-full text-xl transition inline-block"
               >
                 Записаться онлайн
@@ -907,27 +1016,51 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-[#1a1a1a] text-white py-12 px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="text-center md:text-left">
               <h3
                 className="text-2xl font-bold mb-2 hover:text-[#d4a762] transition-colors cursor-pointer font-serif tracking-tight"
                 onClick={() => window.location.reload()}
               >
                 Barber Baxha
               </h3>
-              <p>© 2025 Все права защищены</p>
+              <p className="text-gray-300 mb-2">© 2025 Все права защищены</p>
+              <p className="text-sm text-gray-400">
+                Профессиональные стрижки и обучение барберов
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                Сайт создан:{" "}
+                <Link
+                  href="https://t.me/PapyRoy"
+                  target="_blank"
+                  className="hover:text-[#d4a762] transition-colors"
+                >
+                  Roy&dev
+                </Link>
+              </p>
             </div>
-            <div className="flex items-center gap-6 text-lg">
-              <Link href="#" className="hover:text-[#d4a762]">
-                Instagram
-              </Link>
-              <Link
-                href="https://t.me/barber_baxha"
-                target="_blank"
-                className="hover:text-[#d4a762]"
-              >
-                Telegram
-              </Link>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="text-center md:text-right">
+                <p className="text-gray-300 mb-2">Свяжитесь со мной</p>
+                <div className="flex items-center justify-center md:justify-end gap-4 text-lg">
+                  <Link
+                    href="https://www.instagram.com/bakha2505?igsh=cDlvMmgwY2VvbWI1"
+                    target="_blank"
+                    className="hover:text-[#d4a762] transition-colors flex items-center gap-2"
+                    aria-label="Instagram профиль"
+                  >
+                    <span>Instagram</span>
+                  </Link>
+                  <Link
+                    href="https://t.me/Bakha2505"
+                    target="_blank"
+                    className="hover:text-[#d4a762] transition-colors flex items-center gap-2"
+                    aria-label="Telegram канал"
+                  >
+                    <span>Telegram</span>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
